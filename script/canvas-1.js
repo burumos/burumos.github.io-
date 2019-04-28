@@ -2,8 +2,7 @@
 // https://konvajs.org/docs/sandbox/Multi-touch_Scale_Shape.html
 // https://konvajs.org/docs/drag_and_drop/Drag_an_Image.html
 
-const file_btn = document.getElementById('file-btn');
-const canvas = document.getElementById('canvas');
+// const canvas = document.getElementById('canvas');
 const canvasWidth = window.innerWidth;
 const canvasHeight = 800;
 
@@ -47,7 +46,7 @@ const canvasHeight = 800;
 //     };
 // }
 
-window.onload.addEventListener(() => {
+window.addEventListener('load', () => {
     const stage = new Konva.Stage({
         container: 'container',
         width: canvasWidth,
@@ -55,10 +54,33 @@ window.onload.addEventListener(() => {
     });
 
     let imageObj = new Image();
+    let onloadImageLayer = null;
     imageObj.onload = () => {
-        drawImage(imageObj, stage);
+        onloadImageLayer = drawImage(imageObj, stage);
     };
     imageObj.src = 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';
+
+    // fileを選んで読み込み
+    const file_btn = document.getElementById('file-btn');
+    file_btn.addEventListener('change', (event) => {
+          // ファイル情報を取得
+        const fileData = event.target.files[0];
+        // 画像ファイル以外は処理を止める
+        if(!fileData.type.match('image.*')) {
+            alert('画像を選択してください');
+            return;
+        }
+        // FileReaderオブジェクトを使ってファイル読み込み
+        const reader = new FileReader();
+        // ファイル読み込みに成功したときの処理
+        reader.onload = function() {
+            // Canvas上に表示する
+            const uploadImgSrc = reader.result;
+            drawImage(uploadImgSrc, stage);
+        };
+        // ファイル読み込みを実行
+        reader.readAsDataURL(fileData);
+    });
 });
 
 
@@ -66,18 +88,16 @@ window.onload.addEventListener(() => {
 function drawImage(imageObj, stage, option={}, layer=null) {
     if (!layer) layer = new Konva.Layer();
 
-    imageObj.onload = function() {
-        const image = new Konva.Image({
-            image: imageObj,
-            x: option.x || 50,
-            y: option.y || 50,
-            width: option.width || imageObj.width,
-            height: option.height || imageObj.height,
-        });
+    const image = new Konva.Image({
+        image: imageObj,
+        x: option.x || 50,
+        y: option.y || 50,
+        width: option.width || imageObj.width,
+        height: option.height || imageObj.height,
+    });
 
-        layer.add(image);
-        stage.add(layer);
-    };
+    layer.add(image);
+    stage.add(layer);
     return layer;
 }
 

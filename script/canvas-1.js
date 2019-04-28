@@ -4,8 +4,8 @@
 
 const file_btn = document.getElementById('file-btn');
 const canvas = document.getElementById('canvas');
-const canvasWidth = 500;
-const canvasHeight = canvas.innerHeight;
+const canvasWidth = window.innerWidth;
+const canvasHeight = 800;
 
 // Canvasの準備
 // var ctx = canvas.getContext('2d');

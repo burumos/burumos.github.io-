@@ -2,49 +2,8 @@
 // https://konvajs.org/docs/sandbox/Multi-touch_Scale_Shape.html
 // https://konvajs.org/docs/drag_and_drop/Drag_an_Image.html
 
-// const canvas = document.getElementById('canvas');
 const canvasWidth = window.innerWidth;
 const canvasHeight = 800;
-
-// Canvasの準備
-// var ctx = canvas.getContext('2d');
-
-// function loadLocalImage(e) {
-//   // ファイル情報を取得
-//   const fileData = e.target.files[0];
-
-//   // 画像ファイル以外は処理を止める
-//   if(!fileData.type.match('image.*')) {
-//     alert('画像を選択してください');
-//     return;
-//   }
-
-//   // FileReaderオブジェクトを使ってファイル読み込み
-//   const reader = new FileReader();
-//   // ファイル読み込みに成功したときの処理
-//   reader.onload = function() {
-//     // Canvas上に表示する
-//     uploadImgSrc = reader.result;
-//     canvasDraw();
-//   };
-//   // ファイル読み込みを実行
-//   reader.readAsDataURL(fileData);
-// }
-
-// ファイルが指定された時にloadLocalImage()を実行
-// file_btn.addEventListener('change', loadLocalImage, false);
-
-// Canvas上に画像を表示する
-// function canvasDraw() {
-//     // canvas内の要素をクリアする
-//     // ctx.clearRect(0, 0, 100, 100);
-//     // Canvas上に画像を表示
-//     const img = new Image();
-//     img.src = uploadImgSrc;
-//     img.onload = function() {
-//       ctx.drawImage(img, 0, 0, 30, 30);
-//     };
-// }
 
 window.addEventListener('load', () => {
     const stage = new Konva.Stage({
@@ -56,7 +15,7 @@ window.addEventListener('load', () => {
     let imageObj = new Image();
     let onloadImageLayer = null;
     imageObj.onload = () => {
-        onloadImageLayer = drawImage(imageObj, stage);
+        onloadImageLayer = drawImage(imageObj, stage, {draggable: true});
     };
     imageObj.src = 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';
 
@@ -74,9 +33,13 @@ window.addEventListener('load', () => {
         const reader = new FileReader();
         // ファイル読み込みに成功したときの処理
         reader.onload = function() {
-            // Canvas上に表示する
-            const uploadImgSrc = reader.result;
-            drawImage(uploadImgSrc, stage);
+            let selectedImageObj = new Image();
+            selectedImageObj.onload = () => {
+                drawImage(selectedImageObj, stage, {
+                    draggable: true,
+                });
+            };
+            selectedImageObj.src = reader.result;
         };
         // ファイル読み込みを実行
         reader.readAsDataURL(fileData);
@@ -87,14 +50,16 @@ window.addEventListener('load', () => {
 // イメージオブジェクトを基に描画
 function drawImage(imageObj, stage, option={}, layer=null) {
     if (!layer) layer = new Konva.Layer();
-
-    const image = new Konva.Image({
+    option = {
         image: imageObj,
         x: option.x || 50,
         y: option.y || 50,
         width: option.width || imageObj.width,
         height: option.height || imageObj.height,
-    });
+        draggable: option.draggable || false,
+    };
+
+    const image = new Konva.Image(option);
 
     layer.add(image);
     stage.add(layer);

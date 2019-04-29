@@ -16,7 +16,6 @@ windowLoadPromise.then(() => {
 
     // fileを選択して描画
     const file_btn = document.getElementById('file-btn');
-    // file_btn.addEventListener('change', (event) => {
     changePromise(file_btn).then((event) => {
           // ファイル情報を取得
         const fileData = event.target.files[0];

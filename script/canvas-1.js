@@ -2,8 +2,9 @@
 // https://konvajs.org/docs/sandbox/Multi-touch_Scale_Shape.html
 // https://konvajs.org/docs/drag_and_drop/Drag_an_Image.html
 
-const canvasWidth = window.innerWidth;
-const canvasHeight = 800;
+const canvasDom = document.getElementById('container');
+const canvasWidth = canvasDom.clientWidth || window.innerWidth;
+const canvasHeight = canvasDom.clientHeight || 800;
 let stage = null;
 
 const windowLoadPromise = loadPromise(window);
@@ -61,12 +62,13 @@ function changePromise(obj) {return eventPromise(obj, 'change');}
 // イメージオブジェクトを基に描画
 function drawImage(imageObj, stage, option={}, layer=null) {
     if (!layer) layer = new Konva.Layer();
+    const HWRation = calcRation(imageObj.height, imageObj.width);
     option = {
         image: imageObj,
         x: option.x || 50,
         y: option.y || 50,
-        width: option.width || imageObj.width,
-        height: option.height || imageObj.height,
+        width: option.width || imageObj.width * HWRation,
+        height: option.height || imageObj.height * HWRation,
         draggable: option.draggable || false,
     };
 
@@ -79,5 +81,16 @@ function drawImage(imageObj, stage, option={}, layer=null) {
 
 function getDistance(p1, p2) {
     return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+}
+
+// 縦横の倍率を求める
+function calcRation(height, width, targetStage=null) {
+    if (!targetStage) {
+        targetStage = stage;
+    }
+    const HRation = targetStage.height() / height;
+    const WRation = targetStage.width() / width;
+    return (HRation > 1 && WRation > 1) ?
+        1 : Math.min(HRation, WRation);
 }
 

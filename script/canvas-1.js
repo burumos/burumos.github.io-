@@ -6,6 +6,8 @@ const canvasDom = document.getElementById('container');
 const canvasWidth = canvasDom.clientWidth || window.innerWidth;
 const canvasHeight = canvasDom.clientHeight || 800;
 let stage = null;
+let activeShape = null;
+let lastDist = 0;
 
 const windowLoadPromise = loadPromise(window);
 windowLoadPromise.then(() => {
@@ -17,7 +19,7 @@ windowLoadPromise.then(() => {
 
     // fileを選択して描画
     const file_btn = document.getElementById('file-btn');
-    changePromise(file_btn).then((event) => {
+    file_btn.addEventListener('change', (event) => {
           // ファイル情報を取得
         const fileData = event.target.files[0];
         // 画像ファイル以外は処理を止める
@@ -35,29 +37,73 @@ windowLoadPromise.then(() => {
         }).then(() => {
             drawImage(selectedImageObj, stage, {
                 draggable: true,
+                name: 'selectedImage' + getCount(),
             });
         });
         // ファイル読み込みを実行
         reader.readAsDataURL(fileData);
     });
+
+    stage.on('tap', e => {
+        const shape = e.target;
+        activeShape = activeShape && activeShape.getName() === shape.getName()
+            ? null
+            : shape;
+    });
+
+    stage.getContent().addEventListener(
+        'touchmove',
+        event => {
+            const touch1 = event.touches[0];
+            const touch2 = event.touches[1];
+
+            if (touch1 && touch2 && activeShape && activeShape.getName()) {
+                const dist = getDistance(
+                    {x: touch1.clientX,
+                     y: touch1.clientY},
+                    {x: touch2.clientX,
+                     y: touch2.clientY}
+                );
+
+                if (!lastDist) {
+                    lastDist = dist;
+                }
+
+                const scale = (activeShape.scaleX() * dist) / lastDist;
+
+                activeShape.scaleX(scale);
+                activeShape.scaleY(scale);
+                activeShape.getLayer().draw();
+                lastDist = dist;
+            }
+        });
+    stage.getContent().addEventListener(
+        'touchend',
+        () =>{
+          lastDist = 0;
+        });
 });
 
 // 飛行機を描画
 const initImageObj = new Image();
 Promise.all([windowLoadPromise, loadPromise(initImageObj)]).then(() => {
-    drawImage(initImageObj, stage, {draggable: true});
+    drawImage(initImageObj, stage, {
+        draggable: true,
+        stroke: 'black',
+        strokeWidth: 5,
+        name: 'initImage',
+    });
 });
 initImageObj.src = 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';
 
 function eventPromise(obj, eventName) {
     return new Promise(resolve => {
-        return obj.addEventListener(eventName, (e) => {
+        obj.addEventListener(eventName, (e) => {
             resolve(e);
         });
     });
 }
 function loadPromise(obj) {return eventPromise(obj, 'load');}
-function changePromise(obj) {return eventPromise(obj, 'change');}
 
 // イメージオブジェクトを基に描画
 function drawImage(imageObj, stage, option={}, layer=null) {
@@ -70,6 +116,9 @@ function drawImage(imageObj, stage, option={}, layer=null) {
         width: option.width || imageObj.width * HWRation,
         height: option.height || imageObj.height * HWRation,
         draggable: option.draggable || false,
+        stroke: option.stroke || null,
+        strokeWidth: option.strokeWidth || null,
+        name: option.name || null
     };
 
     const image = new Konva.Image(option);
@@ -93,4 +142,9 @@ function calcRation(height, width, targetStage=null) {
     return (HRation > 1 && WRation > 1) ?
         1 : Math.min(HRation, WRation);
 }
+
+const getCount = function() {
+    let c = 0;
+    return () => c++;
+}();
 

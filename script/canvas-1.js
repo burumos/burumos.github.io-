@@ -48,7 +48,10 @@ windowLoadPromise.then(() => {
 
     stage.getContent().addEventListener(
         'touchmove',
-        event => pinchInOut(event),
+        event => {
+            printLog(getCount(), 'touchmove', activeShape && activeShape.getName());
+            pinchInOut(event);
+        },
         false);
 
     stage.getContent().addEventListener(
@@ -175,7 +178,7 @@ function printLog(...arguments) {
                   ? [arguments]
                   : Array.apply(null, arguments));
     const str = args.reduce((x, res) => {
-        return x + res;
+        return x + ' ' + res;
     });
-    logDom.innerHTML = str + '<br>' + logDom.innerHTML;
+    logDom.innerHTML = str + '<br>' + (logDom.innerHTML && logDom.innerHTML.slice(0, 1000));
 }

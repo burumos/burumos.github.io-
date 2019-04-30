@@ -27,21 +27,10 @@ windowLoadPromise.then(() => {
             alert('画像を選択してください');
             return;
         }
-        // FileReaderオブジェクトを使ってファイル読み込み
-        const reader = new FileReader();
-        let selectedImageObj = new Image();
-        loadPromise(reader).then(() => {
-            const promise = loadPromise(selectedImageObj);
-            selectedImageObj.src = reader.result;
-            return promise;
-        }).then(() => {
-            drawImage(selectedImageObj, stage, {
-                draggable: true,
-                name: 'selectedImage' + getCount(),
-            });
+        drawImageByFile(fileData, {
+            draggable: true,
+            name: 'selectedImage' + getCount(),
         });
-        // ファイル読み込みを実行
-        reader.readAsDataURL(fileData);
     });
 
     stage.on('tap', e => {
@@ -53,33 +42,12 @@ windowLoadPromise.then(() => {
 
     stage.getContent().addEventListener(
         'touchmove',
-        event => {
-            const touch1 = event.touches[0];
-            const touch2 = event.touches[1];
+        event => pinchInOut(event),
+        false);
 
-            if (touch1 && touch2 && activeShape && activeShape.getName()) {
-                const dist = getDistance(
-                    {x: touch1.clientX,
-                     y: touch1.clientY},
-                    {x: touch2.clientX,
-                     y: touch2.clientY}
-                );
-
-                if (!lastDist) {
-                    lastDist = dist;
-                }
-
-                const scale = (activeShape.scaleX() * dist) / lastDist;
-
-                activeShape.scaleX(scale);
-                activeShape.scaleY(scale);
-                activeShape.getLayer().draw();
-                lastDist = dist;
-            }
-        });
     stage.getContent().addEventListener(
         'touchend',
-        () =>{
+        () => {
           lastDist = 0;
         });
 });
@@ -96,14 +64,55 @@ Promise.all([windowLoadPromise, loadPromise(initImageObj)]).then(() => {
 });
 initImageObj.src = '/image/airplane.png';
 
-function eventPromise(obj, eventName) {
+// 画像を選択して描画
+function drawImageByFile(file, option={}, layer=null) {
+    // FileReaderオブジェクトを使ってファイル読み込み
+    const reader = new FileReader();
+    let selectedImageObj = new Image();
+    loadPromise(reader).then(() => {
+        const promise = loadPromise(selectedImageObj);
+        selectedImageObj.src = reader.result;
+        return promise;
+    }).then(() => {
+        drawImage(selectedImageObj, stage, option, layer);
+    });
+    // ファイル読み込みを実行
+    reader.readAsDataURL(file);
+}
+
+// ピンチインorアウト
+function pinchInOut (event) {
+    const touch1 = event.touches[0];
+    const touch2 = event.touches[1];
+
+    if (!(touch1 && touch2 && activeShape && activeShape.getName())) {
+        return;
+    }
+    const dist = getDistance(
+        {x: touch1.clientX,
+         y: touch1.clientY},
+        {x: touch2.clientX,
+         y: touch2.clientY}
+    );
+
+    if (!lastDist) {
+        lastDist = dist;
+    }
+
+    const scale = (activeShape.scaleX() * dist) / lastDist;
+    activeShape.scaleX(scale);
+    activeShape.scaleY(scale);
+    activeShape.getLayer().draw();
+    lastDist = dist;
+};
+
+function loadPromise(obj) {
     return new Promise(resolve => {
-        obj.addEventListener(eventName, (e) => {
+        obj.addEventListener('load', (e) => {
             resolve(e);
         });
     });
 }
-function loadPromise(obj) {return eventPromise(obj, 'load');}
 
 // イメージオブジェクトを基に描画
 function drawImage(imageObj, stage, option={}, layer=null) {

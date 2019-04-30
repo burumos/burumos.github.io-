@@ -43,7 +43,7 @@ windowLoadPromise.then(() => {
             if (touchPoints === 1) {
                 activeShape = shape;
             }
-            printLog('touchstart: ', shape.name());
+            printLog('touchstart: ', shape.name(), shape.pixelSize(1));
         });
 
     stage.getContent().addEventListener(

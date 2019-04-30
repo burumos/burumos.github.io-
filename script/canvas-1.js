@@ -8,13 +8,15 @@ const canvasHeight = canvasDom.clientHeight || 800;
 let stage = null;
 let activeShape = null;
 let lastDist = 0;
+let touchPoints = 0;
 
 const windowLoadPromise = loadPromise(window);
 windowLoadPromise.then(() => {
     stage = new Konva.Stage({
         container: 'container',
         width: canvasWidth,
-        height: canvasHeight
+        height: canvasHeight,
+        name: 'stage',
     });
 
     // fileを選択して描画
@@ -33,12 +35,15 @@ windowLoadPromise.then(() => {
         });
     });
 
-    stage.on('tap', e => {
-        const shape = e.target;
-        activeShape = activeShape && activeShape.getName() === shape.getName()
-            ? null
-            : shape;
-    });
+    stage.on(
+        'touchstart',
+        e => {
+            const shape = e.target;
+            touchPoints++;
+            if (touchPoints === 1) {
+                activeShape = shape;
+            }
+        });
 
     stage.getContent().addEventListener(
         'touchmove',
@@ -48,7 +53,11 @@ windowLoadPromise.then(() => {
     stage.getContent().addEventListener(
         'touchend',
         () => {
-          lastDist = 0;
+            lastDist = 0;
+            touchPoints--;
+            if (touchPoints === 0) {
+                activeShape = null;
+            }
         });
 });
 
@@ -88,6 +97,7 @@ function pinchInOut (event) {
     if (!(touch1 && touch2 && activeShape && activeShape.getName())) {
         return;
     }
+    const layer = activeShape.getLayer();
     const dist = getDistance(
         {x: touch1.clientX,
          y: touch1.clientY},
@@ -102,7 +112,7 @@ function pinchInOut (event) {
     const scale = (activeShape.scaleX() * dist) / lastDist;
     activeShape.scaleX(scale);
     activeShape.scaleY(scale);
-    activeShape.getLayer().draw();
+    if(layer) layer.batchDraw();
     lastDist = dist;
 };
 

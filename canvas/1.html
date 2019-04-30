@@ -9,6 +9,7 @@
         <p><input type="button" onclick="window.location.reload(true);" value="super reload"></input></p>
         <input type="file" id="file-btn" accept='image/*'>
         <div id="container"></div>
+        <div id="log"></div>
         <script src="https://unpkg.com/konva@3.2.4/konva.min.js"></script>
         <script src="../script/canvas-1.js"></script>
         <style>
@@ -19,6 +20,13 @@
              background-color: #eee;
              height: 800px;
              width: 100%;
+         }
+         #log {
+             width: 100%;
+             height: 400px;
+             background-color: #fff;
+             margin-top: 5px;
+             overflow: scroll;
          }
         </style>
     </body>

@@ -43,6 +43,7 @@ windowLoadPromise.then(() => {
             if (touchPoints === 1) {
                 activeShape = shape;
             }
+            printLog('touchstart: ', shape.name());
         });
 
     stage.getContent().addEventListener(
@@ -168,3 +169,13 @@ const getCount = function() {
     return () => c++;
 }();
 
+const logDom = document.getElementById('log');
+function printLog(...arguments) {
+    const args = ((typeof arguments === 'string' || arguments.length === 1)
+                  ? [arguments]
+                  : Array.apply(null, arguments));
+    const str = args.reduce((x, res) => {
+        return x + res;
+    });
+    logDom.innerHTML = str + '<br>' + logDom.innerHTML;
+}

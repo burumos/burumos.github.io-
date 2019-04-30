@@ -94,7 +94,7 @@ Promise.all([windowLoadPromise, loadPromise(initImageObj)]).then(() => {
         name: 'initImage',
     });
 });
-initImageObj.src = 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png';
+initImageObj.src = '/image/airplane.png';
 
 function eventPromise(obj, eventName) {
     return new Promise(resolve => {
@@ -128,6 +128,7 @@ function drawImage(imageObj, stage, option={}, layer=null) {
     return layer;
 }
 
+// 2点間の距離を求める
 function getDistance(p1, p2) {
     return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 }

@@ -7,6 +7,10 @@
         <p><a href="/">TOP</a></p>
         <p>canvas-1</p>
         <p><input type="button" onclick="window.location.reload(true);" value="super reload"></input></p>
+        <p>
+            <input type="button" id="clone" value="clone">
+            <input type="button" id="downSizeCopy" value="down size copy">
+        </p>
         <input type="file" id="file-btn" accept='image/*'>
         <div id="container"></div>
         <div id="log"></div>
@@ -27,6 +31,9 @@
              background-color: #fff;
              margin-top: 5px;
              overflow: scroll;
+         }
+         #downSizeCopy {
+             margin-left: 10px;
          }
         </style>
     </body>

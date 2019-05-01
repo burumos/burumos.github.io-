@@ -9,6 +9,7 @@ let stage = null;
 let activeShape = null;
 let lastDist = 0;
 let touchPoints = 0;
+let lastActiveShape = null;
 
 const windowLoadPromise = loadPromise(window);
 windowLoadPromise.then(() => {
@@ -39,11 +40,12 @@ windowLoadPromise.then(() => {
         'touchstart',
         e => {
             const shape = e.target;
+            lastActiveShape = shape;
             touchPoints++;
             if (touchPoints === 1) {
                 activeShape = shape;
             }
-            printLog('touchstart: ', shape.name(), shape.pixelSize(1));
+            printLog('touchstart: ', shape.name());
         });
 
     stage.getContent().addEventListener(
@@ -63,6 +65,44 @@ windowLoadPromise.then(() => {
                 activeShape = null;
             }
         });
+
+    const cloneLayer = new Konva.Layer();
+    stage.add(cloneLayer);
+    document.getElementById('clone').addEventListener('click', (e) => {
+        if (!lastActiveShape) return;
+
+        const cloneShape = lastActiveShape.clone({
+            x: 0,
+            y: 0,
+            stroke: 'black',
+            strokeWidth: 5,
+        });
+        printLog('clone shape');
+        cloneLayer.add(cloneShape);
+        cloneLayer.draw();
+    });
+
+    document.getElementById('downSizeCopy').addEventListener('click', (e) => {
+        if (!lastActiveShape) return;
+
+        (new Promise((resolve) => {
+            lastActiveShape.toImage({
+                mimeType: 'image/jpeg',
+                quality: 0,
+                // pixelRatio: 0.1,
+                callback: image => resolve(image),
+            });
+        })).then(image => {
+            console.log('copy', image, typeof image);
+            drawImage(image, stage, {
+                x: 0,
+                y: 0,
+                draggable: true,
+                name: 'copiedImage',
+            }, cloneLayer);
+            cloneLayer.draw();
+        });
+    });
 });
 
 // 飛行機を描画

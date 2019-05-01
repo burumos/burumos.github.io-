@@ -90,12 +90,11 @@ windowLoadPromise.then(() => {
         (new Promise((resolve) => {
             lastActiveShape.toImage({
                 mimeType: 'image/jpeg',
-                quality: 0,
-                // pixelRatio: 0.1,
+                quality: 0.6,
                 callback: image => resolve(image),
             });
         })).then(image => {
-            // console.log('copy', image, typeof image);
+            // console.log('size', image.src.length);
             drawImage(image, stage, {
                 x: 0,
                 y: 0,

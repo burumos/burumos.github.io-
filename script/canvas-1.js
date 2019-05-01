@@ -2,6 +2,7 @@
 // https://konvajs.org/docs/sandbox/Multi-touch_Scale_Shape.html
 // https://konvajs.org/docs/drag_and_drop/Drag_an_Image.html
 
+const version = 0.01;
 const canvasDom = document.getElementById('container');
 const canvasWidth = canvasDom.clientWidth || window.innerWidth;
 const canvasHeight = canvasDom.clientHeight || 800;
@@ -13,6 +14,7 @@ let lastActiveShape = null;
 
 const windowLoadPromise = loadPromise(window);
 windowLoadPromise.then(() => {
+    printLog('version.', version);
     stage = new Konva.Stage({
         container: 'container',
         width: canvasWidth,

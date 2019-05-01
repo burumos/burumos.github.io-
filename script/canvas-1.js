@@ -84,7 +84,7 @@ windowLoadPromise.then(() => {
 
     document.getElementById('downSizeCopy').addEventListener('click', (e) => {
         if (!lastActiveShape) return;
-
+        printLog('start down size copy');
         (new Promise((resolve) => {
             lastActiveShape.toImage({
                 mimeType: 'image/jpeg',
@@ -93,7 +93,7 @@ windowLoadPromise.then(() => {
                 callback: image => resolve(image),
             });
         })).then(image => {
-            console.log('copy', image, typeof image);
+            // console.log('copy', image, typeof image);
             drawImage(image, stage, {
                 x: 0,
                 y: 0,
@@ -101,6 +101,8 @@ windowLoadPromise.then(() => {
                 name: 'copiedImage',
             }, cloneLayer);
             cloneLayer.draw();
+        }).catch(err => {
+            printLog('error: down size copy');
         });
     });
 });

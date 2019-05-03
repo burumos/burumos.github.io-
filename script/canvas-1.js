@@ -1,6 +1,8 @@
 // https://www.tam-tam.co.jp/tipsnote/javascript/post13538.html
 // https://konvajs.org/docs/sandbox/Multi-touch_Scale_Shape.html
 // https://konvajs.org/docs/drag_and_drop/Drag_an_Image.html
+// stage.getLayers()[2].getContext()._context.getImageData(100, 100, 1,1).data
+// stage.getLayers()[2].find('Image')[0].getContext()._context.getImageData(100,100,1,1).data
 
 const version = 0.01;
 const canvasDom = document.getElementById('container');
@@ -105,6 +107,16 @@ windowLoadPromise.then(() => {
         }).catch(err => {
             printLog('error: down size copy');
         });
+    });
+
+    document.getElementById('download').addEventListener('click', (e) => {
+        stage.toImage({callback: img=> {
+            const a = document.createElement("a");
+            const dateString = (new Date()).getTime();
+            a.download = 'image' + dateString + '.png';
+            a.href = img.src;
+            a.click();
+        }});
     });
 });
 

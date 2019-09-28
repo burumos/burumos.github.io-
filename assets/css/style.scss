@@ -8,24 +8,25 @@
     margin-left: 300px;
     text-align: left;
 
-    li::before {
-      min-width: 20px;
+    li a::before {
+      margin-right: 3px;
     }
-    li.tag-h1::before {
+
+    .tag-h1 a::before {
       content: "-";
     }
-    li.tag-h2::before {
+    .tag-h2 a::before {
       content: "--";
     }
-    li.tag-h3::before {
+    .tag-h3 a::before {
       content: "---";
     }
-    li.tag-h4::before {
+    .tag-h4 a::before {
       content: "----";
     }
   }
+}
 
-  > footer {
-    margin-left: 335px;
-  }
+footer {
+  margin-left: 335px;
 }

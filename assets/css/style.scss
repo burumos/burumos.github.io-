@@ -1,0 +1,17 @@
+
+.wrapper > nav {
+  li.tag-h1:after {
+    content: " |";
+  }
+  li.tag-h2:after {
+    content: " ||";
+  }
+  li.tag-h3:after {
+    content: " |||";
+  }
+  li.tag-h4:after {
+    content: " ||||";
+  }
+}
+
+@import "{{ site.theme }}"

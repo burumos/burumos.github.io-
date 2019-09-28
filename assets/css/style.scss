@@ -1,3 +1,7 @@
+---
+---
+
+@import "{{ site.theme }}";
 
 .wrapper > nav {
   li.tag-h1::after {
@@ -17,5 +21,3 @@
     margin-left: 3px;
   }
 }
-
-@import "{{ site.theme }}"

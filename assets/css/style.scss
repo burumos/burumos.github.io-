@@ -3,21 +3,29 @@
 
 @import "{{ site.theme }}";
 
-.wrapper > nav {
-  li.tag-h1::after {
-    content: " |";
-    margin-left: 3px;
+.wrapper {
+  > nav {
+    margin-left: 300px;
+    text-align: left;
+
+    li::before {
+      min-width: 20px;
+    }
+    li.tag-h1::before {
+      content: "-";
+    }
+    li.tag-h2::before {
+      content: "--";
+    }
+    li.tag-h3::before {
+      content: "---";
+    }
+    li.tag-h4::before {
+      content: "----";
+    }
   }
-  li.tag-h2::after {
-    content: " ||";
-    margin-left: 3px;
-  }
-  li.tag-h3::after {
-    content: " |||";
-    margin-left: 3px;
-  }
-  li.tag-h4::after {
-    content: " ||||";
-    margin-left: 3px;
+
+  > footer {
+    margin-left: 335px;
   }
 }

@@ -1,16 +1,20 @@
 
 .wrapper > nav {
-  li.tag-h1:after {
+  li.tag-h1::after {
     content: " |";
+    margin-left: 3px;
   }
-  li.tag-h2:after {
+  li.tag-h2::after {
     content: " ||";
+    margin-left: 3px;
   }
-  li.tag-h3:after {
+  li.tag-h3::after {
     content: " |||";
+    margin-left: 3px;
   }
-  li.tag-h4:after {
+  li.tag-h4::after {
     content: " ||||";
+    margin-left: 3px;
   }
 }
 

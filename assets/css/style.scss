@@ -30,3 +30,9 @@
 footer {
   margin-left: 335px;
 }
+
+@media print, screen and (max-width: 1060px) {
+  footer {
+    margin-left: unset;
+  }
+}

@@ -3,10 +3,19 @@
 
 @import "{{ site.theme }}";
 
+header {
+  padding-bottom: 0;
+}
+
 .wrapper {
   > nav {
     margin-left: 300px;
     text-align: left;
+
+    ul {
+      overflow-y: auto;
+      max-height: 65vh;
+    }
 
     li a::before {
       margin-right: 3px;

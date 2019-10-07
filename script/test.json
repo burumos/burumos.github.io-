@@ -1,0 +1,10 @@
+{
+  "files": {
+    "SRC_DIR/memo/emacs-lisp.md": "emacs-lisp.md",
+    "SRC_DIR/memo/javascript-lang.md": "javascript-lang.md",
+    "SRC_DIR/memo/golang.md": "golang.md"
+  },
+  "variables": {
+    "SRC_DIR": "/Users/kawajiri_n/googledrive/study"
+  }
+}

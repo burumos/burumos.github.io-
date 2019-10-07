@@ -15,3 +15,12 @@ dd
 ## h2-2
 
 333
+
+```javascript
+function testFunc(arg) {
+  if (arg) {
+    return arg
+  }
+  return null;
+}
+```

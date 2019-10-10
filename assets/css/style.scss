@@ -6,6 +6,17 @@
 header {
   padding-bottom: 0;
 }
+.home-link {
+  margin-top: 15px;
+  font-size: 1.3em;
+  color: rgb(66, 118, 182);
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 30%;
+  background-color: #eee;
+  position: absolute;
+  left: 20px;
+}
 
 .wrapper {
   > nav {

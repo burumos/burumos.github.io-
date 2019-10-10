@@ -2,11 +2,9 @@
 
 # start
 ## 参考
-- (Programming in Emacs Lisp: Table of Contents)
-  [http://www.math.s.chiba-u.ac.jp/~matsu/lisp/emacs-lisp-intro-jp_toc.html]
-- ([Home] Emacsビギナー)
-  [https://www.emacswiki.org/emacs/Emacs%E3%83%93%E3%82%AE%E3%83%8A%E3%83%BC]])
-- (Elisp Programming)[https://caiorss.github.io/Emacs-Elisp-Programming/Elisp_Programming.html]
+- [Programming in Emacs Lisp: Table of Contents](http://www.math.s.chiba-u.ac.jp/~matsu/lisp/emacs-lisp-intro-jp_toc.html)
+- [Home:: Emacsビギナー](https://www.emacswiki.org/emacs/Emacs%E3%83%93%E3%82%AE%E3%83%8A%E3%83%BC)
+- [Elisp Programming](https://caiorss.github.io/Emacs-Elisp-Programming/Elisp_Programming.html)
 
 ## 用語
 - リージョン
@@ -365,6 +363,43 @@
 - `(narrow-to-regin start end)`
     選択範囲をナローイングする
 
+# window
+- `(selected-window)`
+    現在操作中のwindowのオブジェクトを返す
+- `(select-window WINDOW &optional NORECORD)`
+    操作するwindowを変更する
+- `(split-window-horizontally &optional SIZE)`
+    window横2つに分割
+- `(split-window-vertically &optional SIZE)`
+    縦2つに分割
+- `(delete-other-windows &optional WINDOW)`
+    他のwindowを閉じる
+- `(switch-to-buffer-other-window BUFFER-OR-NAME &optional NORECORD)`
+    他のwindowに指定したbufferを開く
+- `(delete-window &optional WINDOW)`
+    今のwindowまたは指定したwindowを閉じる
+- `(window-list &optional FRAME MINIBUF WINDOW)`
+    windowのリストを取得
+- `(window-buffer &optional WINDOW)`
+    windowに開いているbufferを取得
+- `(current-window-configuration &optional FRAME)`
+    window-configurationオブジェクトを取得
+- `(set-window-configuration CONFIGURATION)`
+    今のwindowにwindow-configurationを設定
+- `(balance-windows &optional WINDOW-OR-FRAME)`
+    文字サイズを拡大
+- `(delete-windows-on &optional BUFFER-OR-NAME FRAME)`
+    表示されているwindowを全て閉じる
+- `(display-buffer BUFFER-OR-NAME &optional ACTION FRAME)`
+    指定したbufferを表示させる?(switch-to-bufferとの違いは?)
+- `(shrink-window-if-larger-than-buffer &optional WINDOW)`
+    高さを縮める?
+- `(other-window-for-scrolling)`
+    `scroll-other-window`でスクロールされるwindowを返す
+- `(enlarge-window DELTA &optional HORIZONTAL)`
+    他のwindowからDELTA分奪ってサイズを大きくする. HORIZONTALが非nilで
+    あれば横、nilであれば縦(default nil)
+
 # point/mark/region
 ## 位置情報
 - `(point-min)`
@@ -388,6 +423,8 @@
 ## 操作
 - `(goto-char POSITION)`
     pointを移動
+- `(set-window-point WINDOW POS)`
+    指定したWINDOWのpoint位置を変更する
 - `(beginning-of-buffer &optional ARG)`
     カーソルをバッファの先頭に移動させ、以前の位置にマークを置く
 - `(push-mark number)`
@@ -400,6 +437,7 @@
     - BOUND 検索範囲
     - NOERROR 非nilでエラーを出さない
     - COUNT 何回目に表われたSTRINGにポイントを移すか(負だとback)
+
 
 ## contentsに対する操作
 ### 取得
@@ -483,38 +521,6 @@
 - `(append-to-file START END FILENAME)`
     指定範囲をファイルに追記する
 
-## window
-- `(split-window-horizontally &optional SIZE)`
-    window横2つに分割
-- `(split-window-vertically &optional SIZE)`
-    縦2つに分割
-- `(delete-other-windows &optional WINDOW)`
-    他のwindowを閉じる
-- `(switch-to-buffer-other-window BUFFER-OR-NAME &optional NORECORD)`
-    他のwindowに指定したbufferを開く
-- `(delete-window &optional WINDOW)`
-    今のwindowまたは指定したwindowを閉じる
-- `(window-list &optional FRAME MINIBUF WINDOW)`
-    windowのリストを取得
-- `(window-buffer &optional WINDOW)`
-    windowに開いているbufferを取得
-- `(current-window-configuration &optional FRAME)`
-    window-configurationオブジェクトを取得
-- `(set-window-configuration CONFIGURATION)`
-    今のwindowにwindow-configurationを設定
-- `(balance-windows &optional WINDOW-OR-FRAME)`
-    文字サイズを拡大
-- `(delete-windows-on &optional BUFFER-OR-NAME FRAME)`
-    表示されているwindowを全て閉じる
-- `(display-buffer BUFFER-OR-NAME &optional ACTION FRAME)`
-    指定したbufferを表示させる?(switch-to-bufferとの違いは?)
-- `(shrink-window-if-larger-than-buffer &optional WINDOW)`
-    高さを縮める?
-- `(other-window-for-scrolling)`
-    `scroll-other-window`でスクロールされるwindowを返す
-- `(enlarge-window DELTA &optional HORIZONTAL)`
-    他のwindowからDELTA分奪ってサイズを大きくする. HORIZONTALが非nilで
-    あれば横、nilであれば縦(default nil)
 ## frame
 ー `(make-frame &optional PARAMETERS)`
     新たなframeを立ち上げる

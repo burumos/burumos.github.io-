@@ -1,5 +1,14 @@
 # javascript
 
+# loop
+## 配列
+- breakしたい場合は `for ...of`
+- 最後まで回す場合は `array.map()`
+## オブジェクト
+- breakしたい場合は `for ...of Object.values(obj)`
+- 最後まで回す場合は `Object.values(obj).map(fun)`
+- html collectionの様なArray like objectでも同様
+
 # 関数、メソッド
 ```javascript
 let user = {
